@@ -7,7 +7,6 @@ const connectDB = require("./src/config/db");
 
 const app = express();
 
-
 app.use(cookieParser());
 app.use(logger("dev"));
 app.use(express.json());
@@ -17,15 +16,16 @@ app.use(express.urlencoded({ extended: false }));
 const port = process.env.PORT || 3005;
 
 const start = async () => {
-  try{
+  try {
     await connectDB(process.env.MONGO_URI);
-    app.listen(port , () => 
-    console.log(`Wasteflip server started and listening on ${port}`)
+    console.log("Connected to db successfully");
+
+    app.listen(port, () =>
+      console.log(`Wasteflip server started and listening on ${port}`)
     );
-  }catch(error){
+  } catch (error) {
     console.log(error);
   }
-
 };
 
 start();
