@@ -1,14 +1,12 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const WasteTypeSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+});
 
-    name:{
-        type: String,
-        required: true,
-        unique: true
-    }
-
-
-})
-
-module.exports = mongoose.model('WasteType', WasteTypeSchema);
+const WasteType = mongoose.model("WasteType", WasteTypeSchema);
+module.exports = WasteType;
