@@ -8,5 +8,5 @@ const WasteTypeSchema = new mongoose.Schema({
   },
 });
 
-const WasteType = mongoose.model("WasteType", WasteTypeSchema);
-module.exports = WasteType;
+const Wastetype = mongoose.model("Wastetype", WasteTypeSchema);
+module.exports = Wastetype;
