@@ -4,13 +4,13 @@ const User = require("../../models/user");
 const ACCESS_TOKEN_EXPIRY = 1000 * 60 * 15; // 15 minutes in milliseconds;
 const REFRESH_TOKEN_EXPIRY = 1000 * 60 * 60 * 24 * 30; // 30 days in milliseconds;
 
-export const TOKENS_EXPIRY = {
+const TOKENS_EXPIRY = {
   ACCESS: ACCESS_TOKEN_EXPIRY,
   REFRESH: REFRESH_TOKEN_EXPIRY,
 };
 
 // Helper function to generate access token
-export const generateAccessToken = (user) => {
+const generateAccessToken = (user) => {
   return jwt.sign(
     { id: user._id, role: user.role },
     process.env.JWT_ACCESS_SECRET,
@@ -19,7 +19,7 @@ export const generateAccessToken = (user) => {
 };
 
 // Helper function to generate refresh token
-export const generateRefreshToken = (user) => {
+const generateRefreshToken = (user) => {
   return jwt.sign(
     { id: user._id, role: user.role },
     process.env.JWT_REFRESH_SECRET,
@@ -30,7 +30,7 @@ export const generateRefreshToken = (user) => {
 };
 
 // Helper function to refresh access token when expired and refresh token still available
-export const refreshAccessToken = async (req, res) => {
+const refreshAccessToken = async (req, res) => {
   const { refreshToken } = req.cookies;
 
   if (!refreshToken) {
@@ -64,4 +64,11 @@ export const refreshAccessToken = async (req, res) => {
   } catch (error) {
     res.status(401).json({ message: "Invalid refresh token" });
   }
+};
+
+module.exports = {
+  TOKENS_EXPIRY,
+  generateAccessToken,
+  generateRefreshToken,
+  refreshAccessToken,
 };

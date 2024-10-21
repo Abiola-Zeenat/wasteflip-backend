@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const scheduleSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   enquiryType: { type: String, required: true },
   date: { type: Date, required: true, default: Date.now() },
   size: { type: String },
