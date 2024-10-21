@@ -8,6 +8,7 @@ const dropOffSchema = new mongoose.Schema({
   wasteType: [
     { type: mongoose.Schema.Types.ObjectId, ref: "Wastetype", required: true },
   ],
+  operatingHours: {},
   location: {
     type: {
       type: String, // Always 'Point'
