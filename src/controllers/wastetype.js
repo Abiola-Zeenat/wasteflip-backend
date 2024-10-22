@@ -3,15 +3,19 @@ const { Wastetype, DropOff } = require("../models");
 const { body } = require("express-validator");
 
 const handleValidation = [
-  body("name").trim().isEmpty().withMessage("name must be provided"),
+  body("name").notEmpty().withMessage("name must be provided"),
+  body("pricePerGallon", "Price must be provided")
+    .notEmpty()
+    .isNumeric()
+    .withMessage("Price must be a number"),
   handleErrorValidation,
 ];
 
 const createWasteType = async (req, res) => {
   try {
-    const { name } = req.body;
+    const { name, pricePerGallon } = req.body;
     handleValidation;
-    const wastetype = new Wastetype({ name });
+    const wastetype = new Wastetype({ name, pricePerGallon });
     const savedWastetype = await wastetype.save();
 
     res.status(201).json({
@@ -74,8 +78,35 @@ const getSpecificWastetype = async (req, res) => {
   }
 };
 
+// to update wastetype price per gallon
+const updatePricePerGallon = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const wastetype = await Wastetype.findById(id);
+
+    if (wastetype) {
+      wastetype.pricePerGallon = req.body.pricePerGallon;
+      wastetype._id = id;
+    }
+    handleValidation;
+    const updatedWastetype = await wastetype.save();
+
+    res.status(200).json({
+      success: true,
+      data: updatedWastetype,
+      message: "Wastetype pricePerGallon updated successfully",
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
 module.exports = {
   createWasteType,
   getAllWastetype,
   getSpecificWastetype,
+  updatePricePerGallon,
 };

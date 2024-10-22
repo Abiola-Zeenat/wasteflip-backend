@@ -7,11 +7,21 @@ const scheduleSchema = new mongoose.Schema({
   size: { type: String },
   quantity: { type: String, required: true },
   frequency: { type: String, required: true },
+  wasteType: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Wastetype",
+    required: true,
+  },
   contact: {
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     phoneNumber: { type: String },
     email: { type: String },
+  },
+  status: {
+    type: String,
+    enum: ["In-progress", "completed"],
+    default: "In-progress",
   },
 });
 
