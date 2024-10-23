@@ -4,7 +4,8 @@ const express = require("express");
 const logger = require("morgan");
 const cookieParser = require("cookie-parser");
 const connectDB = require("./src/config/db");
-const wasteRouter = require("./src/routes/wastetype")
+const wasteRouter = require("./src/routes/wastetype");
+const companyRouter = require("./src/routes/company");
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use("/api/wastetype", wasteRouter);
+app.use("/api/company", companyRouter);
 
 //Database connection to the server before starting the server
 const port = process.env.PORT || 3005;
