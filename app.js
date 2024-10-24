@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const connectDB = require("./src/config/db");
 const wasteRouter = require("./src/routes/wastetype");
 const companyRouter = require("./src/routes/company");
+const feedbackRouter = require("./src/routes/feedback");
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/api/wastetype", wasteRouter);
 app.use("/api/company", companyRouter);
+app.use("/api/feedback", feedbackRouter);
 
 //Database connection to the server before starting the server
 const port = process.env.PORT || 3005;
