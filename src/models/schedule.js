@@ -22,13 +22,14 @@ const scheduleSchema = new mongoose.Schema({
     email: { type: String },
     address: { type: String, required: true },
   },
-  subTotal: { type: Number, required: true },
-  serviceCharge: { type: Number, required: true },
-  Total: { type: Number, required: true },
+  payment: {  
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Payment",
+    required: true,},
   status: {
     type: String,
-    enum: ["In-progress", "completed"],
-    default: "In-progress",
+    enum: ["pending", "in-progress", "rejected", "completed"],
+    default: "pending",
   },
 });
 

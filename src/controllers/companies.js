@@ -78,6 +78,36 @@ const getCompanyById = async (req, res) => {
   }
 };
 
+// Get Company by Name (case-insensitive)
+const getCompanyByName = async (req, res) => {
+  const { name } = req.params;
+
+  try {
+    const company = await Company.findOne({
+      name: { $regex: new RegExp("^" + name + "$", "i") }
+    });
+
+    if (!company) {
+      return res.status(404).json({
+        success: false,
+        message: "Company not found"
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: company,
+      message: "Company fetched successfully"
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
+};
+
+
 // UPDATE COMPANY
 const updateCompany = async (req, res) => {
   try {
@@ -127,6 +157,7 @@ module.exports = {
   createCompany,
   getCompanies,
   getCompanyById,
+  getCompanyByName,
   updateCompany,
   deleteCompany,
 };

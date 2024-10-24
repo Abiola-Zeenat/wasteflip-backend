@@ -50,7 +50,7 @@ const getAllWastetype = async (req, res) => {
 };
 
 // Get waste type by id
-const getSpecificWastetype = async (req, res) => {
+const getById = async (req, res) => {
   try {
     const { id } = req.params;
     const wasteType = await Wastetype.findById(id);
@@ -77,6 +77,34 @@ const getSpecificWastetype = async (req, res) => {
     });
   }
 };
+
+const getByName = async (req, res) => {
+  const { name } = req.params;
+
+  try {
+    const wastetype = await Wastetype.findOne({
+      name: { $regex: new RegExp("^" + name + "$", "i") }
+    });
+
+    if (!wastetype) {
+      return res.status(404).json({
+        success: false,
+        message: "Wastetype not found"
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: wastetype,
+      message: "Wastetype fetched successfully"
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
+}
 
 // to update wastetype price per gallon
 const updatePricePerGallon = async (req, res) => {
@@ -107,6 +135,7 @@ const updatePricePerGallon = async (req, res) => {
 module.exports = {
   createWasteType,
   getAllWastetype,
-  getSpecificWastetype,
+  getById,
+  getByName,
   updatePricePerGallon,
 };
