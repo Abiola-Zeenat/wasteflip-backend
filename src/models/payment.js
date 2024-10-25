@@ -15,6 +15,10 @@ const paymentSchema = new mongoose.Schema({
     enum: ["processing", "failed", "success"],
     default: "processing",
   },
+  isArchived: {
+    type: Boolean,
+    Default: false,
+   }, //soft delete field
 });
 
 const Payment = mongoose.model("Payment", paymentSchema);
