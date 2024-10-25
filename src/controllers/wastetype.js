@@ -3,7 +3,7 @@ const { Wastetype, DropOff } = require("../models");
 const { body } = require("express-validator");
 
 const handleValidation = [
-  body("name").notEmpty().withMessage("name must be provided"),
+  body("name", "name must be provided").notEmpty(),
   body("pricePerGallon", "Price must be provided")
     .notEmpty()
     .isNumeric()

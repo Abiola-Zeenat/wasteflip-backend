@@ -3,10 +3,10 @@ const { body } = require("express-validator");
 const { handleErrorValidation } = require("../middlewares/validateUser");
 
 const validateCompany = [
-  body("name").not().isEmpty().withMessage("Company name is required"),
-  body("address.*.street").not().isEmpty().withMessage("Street is required"),
-  body("address.*.city").not().isEmpty().withMessage("City is required"),
-  body("address.*.state").not().isEmpty().withMessage("State is required"),
+  body("name", "Company name is required").notEmpty(),
+  body("address.*.street").notEmpty().withMessage("Street is required"),
+  body("address.*.city").notEmpty().withMessage("City is required"),
+  body("address.*.state").notEmpty().withMessage("State is required"),
   handleErrorValidation,
 ];
 
@@ -84,29 +84,28 @@ const getCompanyByName = async (req, res) => {
 
   try {
     const company = await Company.findOne({
-      name: { $regex: new RegExp("^" + name + "$", "i") }
+      name: { $regex: new RegExp("^" + name + "$", "i") },
     });
 
     if (!company) {
       return res.status(404).json({
         success: false,
-        message: "Company not found"
+        message: "Company not found",
       });
     }
 
     res.status(200).json({
       success: true,
       data: company,
-      message: "Company fetched successfully"
+      message: "Company fetched successfully",
     });
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: err.message
+      message: err.message,
     });
   }
 };
-
 
 // UPDATE COMPANY
 const updateCompany = async (req, res) => {

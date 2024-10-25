@@ -3,8 +3,8 @@ const { body } = require("express-validator");
 const { handleErrorValidation } = require("../middlewares/validateUser");
 
 const validateFeedback = [
-  body("message").notEmpty().withMessage("Message is required"),
-  body("user").notEmpty().withMessage("User ID is required"),
+  body("message", "feedback message is required").notEmpty(),
+  body("user", "User ID is required").notEmpty(),
   handleErrorValidation,
 ];
 
