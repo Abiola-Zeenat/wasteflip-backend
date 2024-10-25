@@ -6,6 +6,7 @@ const {
   getPaymentById,
   updatePaymentStatus,
   archivePayment,
+  verifyOtp,
 } = require("../controllers/payment");
 const {
   validateCreatePayment,
@@ -13,7 +14,8 @@ const {
 } = require("../middlewares/validatePayment");
 
 // TODO: Add the protect and admin middleware where necessary
-router.post("/add", validateCreatePayment, createPayment);
+router.post("/pay", validateCreatePayment, createPayment);
+router.post("/verify-otp", verifyOtp);
 router.get("/all", getAllPayments);
 router.get("/:id", getPaymentById);
 router.put("/:id", validateUpdatePayment, updatePaymentStatus);

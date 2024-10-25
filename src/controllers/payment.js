@@ -1,9 +1,12 @@
 const Payment = require("../models/payment");
+const crypto = require("crypto");
 
 // Create Payment
 const createPayment = async (req, res) => {
   try {
     const { user, subTotal, serviceCharge, Total, paymentMethod } = req.body;
+
+    const otp = crypto.randomInt(100000, 999999);
 
     const payment = new Payment({
       user,
@@ -11,15 +14,53 @@ const createPayment = async (req, res) => {
       serviceCharge,
       Total,
       paymentMethod,
+      otp,
     });
 
     await payment.save();
 
     res.status(201).json({
       success: true,
-      data: payment,
+      data: { payment, otp },
       message: "Payment created successfully",
     });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+const verifyOtp = async (req, res) => {
+  try {
+    const { paymentId, otp } = req.body;
+
+    // Find the payment by ID and check the OTP
+    const payment = await Payment.findById(paymentId);
+
+    if (!payment) {
+      return res.status(404).json({
+        success: false,
+        message: "Payment not found",
+      });
+    }
+
+    if (payment.otp === otp) {
+      // Mark the payment as "success"
+      payment.status = "success";
+      await payment.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "OTP verified and payment successful",
+      });
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid OTP",
+      });
+    }
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -147,4 +188,5 @@ module.exports = {
   getPaymentById,
   updatePaymentStatus,
   archivePayment,
+  verifyOtp
 };
