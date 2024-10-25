@@ -72,7 +72,7 @@ const verifyOtp = async (req, res) => {
 // Get All Payments (exclude soft deleted payments)
 const getAllPayments = async (req, res) => {
   try {
-    const payments = await Payment.find({ isDeleted: false }).populate(
+    const payments = await Payment.find({ isArchived: false }).populate(
       "user",
       "fullName email"
     );
@@ -96,7 +96,7 @@ const getPaymentById = async (req, res) => {
     const { id } = req.params;
     const payment = await Payment.findOne({
       _id: id,
-      isDeleted: false,
+      isArchived: false,
     }).populate("user", "fullName email");
 
     if (!payment) {
@@ -188,5 +188,5 @@ module.exports = {
   getPaymentById,
   updatePaymentStatus,
   archivePayment,
-  verifyOtp
+  verifyOtp,
 };
