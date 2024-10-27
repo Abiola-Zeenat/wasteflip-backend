@@ -1,10 +1,11 @@
 const { body, validationResult } = require("express-validator");
 
-const handleErrorValidation = async (req, res) => {
+const handleErrorValidation = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
+  next();
 };
 // For signup
 const validateSignup = [

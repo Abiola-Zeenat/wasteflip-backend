@@ -14,7 +14,7 @@ const {
 router.post("/add", validateCompany, createCompany);
 router.get("/all", getCompanies);
 router.get("/:id", getCompanyById);
-router.get("/:name", getCompanyByName);
+router.get("/name/:name", getCompanyByName);
 router.put("/:id", validateCompany, updateCompany);
 router.delete("/:id", deleteCompany);
 

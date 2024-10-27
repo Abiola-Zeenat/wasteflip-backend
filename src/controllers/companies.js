@@ -24,7 +24,7 @@ const createCompany = async (req, res) => {
       name,
       address,
     });
-
+    validateCompany;
     await newCompany.save();
 
     res.status(201).json({
