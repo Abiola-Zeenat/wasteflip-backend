@@ -2,20 +2,21 @@ const { handleErrorValidation } = require("../middlewares/validateUser");
 const { Wastetype, DropOff } = require("../models");
 const { body } = require("express-validator");
 
-const handleValidation = [
+const validateWastetype = [
   body("name", "name must be provided").notEmpty(),
+  body("description", "description must be provided").notEmpty(),
   body("pricePerGallon", "Price must be provided")
     .notEmpty()
     .isNumeric()
     .withMessage("Price must be a number"),
+
   handleErrorValidation,
 ];
 
 const createWasteType = async (req, res) => {
   try {
-    const { name, pricePerGallon } = req.body;
-    handleValidation;
-    const wastetype = new Wastetype({ name, pricePerGallon });
+    const { name, description, pricePerGallon } = req.body;
+    const wastetype = new Wastetype({ name, description, pricePerGallon });
     const savedWastetype = await wastetype.save();
 
     res.status(201).json({
@@ -83,46 +84,45 @@ const getByName = async (req, res) => {
 
   try {
     const wastetype = await Wastetype.findOne({
-      name: { $regex: new RegExp("^" + name + "$", "i") }
+      name: { $regex: new RegExp("^" + name + "$", "i") },
     });
 
     if (!wastetype) {
       return res.status(404).json({
         success: false,
-        message: "Wastetype not found"
+        message: "Wastetype not found",
       });
     }
 
     res.status(200).json({
       success: true,
       data: wastetype,
-      message: "Wastetype fetched successfully"
+      message: "Wastetype fetched successfully",
     });
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: err.message
+      message: err.message,
     });
   }
-}
+};
 
 // to update wastetype price per gallon
-const updatePricePerGallon = async (req, res) => {
+const updateWastetype = async (req, res) => {
   try {
     const { id } = req.params;
-    const wastetype = await Wastetype.findById(id);
-
-    if (wastetype) {
-      wastetype.pricePerGallon = req.body.pricePerGallon;
-      wastetype._id = id;
+    const updatedWastetype = await Wastetype.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!updatedWastetype) {
+      return res.status(404).json({ message: "Wastetype not found" });
     }
-    handleValidation;
-    const updatedWastetype = await wastetype.save();
 
     res.status(200).json({
       success: true,
       data: updatedWastetype,
-      message: "Wastetype pricePerGallon updated successfully",
+      message: "Wastetype updated successfully",
     });
   } catch (err) {
     res.status(500).json({
@@ -137,5 +137,6 @@ module.exports = {
   getAllWastetype,
   getById,
   getByName,
-  updatePricePerGallon,
+  updateWastetype,
+  validateWastetype,
 };
