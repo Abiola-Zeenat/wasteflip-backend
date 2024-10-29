@@ -16,7 +16,7 @@ const geocodeAddress = async (address) => {
 
     if (data.status === "OK" && data.results.length > 0) {
       const { lat, lng } = data.results[0].geometry.location;
-      console.log(lat, lng);
+
       return { latitude: lat, longitude: lng };
     } else {
       throw new Error("Unable to find coordinates for this address.");

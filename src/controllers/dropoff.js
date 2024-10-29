@@ -5,7 +5,7 @@ const DropOff = require("../models/dropoff");
 const createDropOff = async (req, res) => {
   try {
     const { name, distance, img, wasteType, location } = req.body;
-    console.log(req.body);
+
     const newDropOff = new DropOff({
       name,
       distance,
