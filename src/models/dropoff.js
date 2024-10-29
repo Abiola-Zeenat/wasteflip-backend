@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const dropOffSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
   distance: { type: Number }, // Will be calculated dynamically
-  distanceUnit: { type: String, default: "miles" },
   img: { type: String, required: true },
   wasteType: [
     { type: mongoose.Schema.Types.ObjectId, ref: "Wastetype", required: true },
