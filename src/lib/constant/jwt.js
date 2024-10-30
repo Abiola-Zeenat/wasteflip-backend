@@ -54,7 +54,7 @@ const refreshAccessToken = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: TOKENS_EXPIRY.ACCESS,
+      maxAge: TOKENS_EXPIRY.ACCESS * 1000,
     });
 
     res.status(200).json({
@@ -62,6 +62,7 @@ const refreshAccessToken = async (req, res) => {
       message: "Access token refreshed successfully",
     });
   } catch (error) {
+    console.log(error);
     res.status(401).json({ message: "Invalid refresh token" });
   }
 };
@@ -71,4 +72,4 @@ module.exports = {
   generateAccessToken,
   generateRefreshToken,
   refreshAccessToken,
-};
+}
