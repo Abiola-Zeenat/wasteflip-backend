@@ -4,16 +4,15 @@ require("express-async-errors");
 const express = require("express");
 const app = express();
 
-//packages 
+//packages
 const logger = require("morgan");
 const cookieParser = require("cookie-parser");
-
 
 // database
 const connectDB = require("./src/config/db");
 
-// routers 
-const authRouter = require('./src/routes/authRouter');
+// routers
+const authRouter = require("./src/routes/authRouter");
 const wasteRouter = require("./src/routes/wastetype");
 const companyRouter = require("./src/routes/company");
 const feedbackRouter = require("./src/routes/feedback");
@@ -21,11 +20,11 @@ const paymentRouter = require("./src/routes/payment");
 const scheduleRouter = require("./src/routes/schedule");
 const dropOffRouter = require("./src/routes/dropoff");
 
-//middlewares 
-const errorHandlerMiddleware = require('./src/middlewares/error-handler')
-const notFoundMiddleware = require('./src/middlewares/not-found')
+//middlewares
+const errorHandlerMiddleware = require("./src/middlewares/error-handler");
+const notFoundMiddleware = require("./src/middlewares/not-found");
 
-app.use(cookieParser( process.env.JWT_ACCESS_SECRET));
+app.use(cookieParser(process.env.JWT_ACCESS_SECRET));
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -36,7 +35,7 @@ app.use("/api/feedback", feedbackRouter);
 app.use("/api/payment", paymentRouter);
 app.use("/api/schedule", scheduleRouter);
 app.use("/api/dropoff", dropOffRouter);
-app.use("/api/v1/auth", authRouter);
+app.use("/api/auth", authRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

@@ -1,4 +1,6 @@
 const express = require("express");
+const router = express.Router();
+
 const {
   createWasteType,
   getAllWastetype,
@@ -7,7 +9,6 @@ const {
   updateWastetype,
   validateWastetype,
 } = require("../controllers/wastetype");
-const router = express.Router();
 
 router.post("/add", validateWastetype, createWasteType);
 router.get("/all", getAllWastetype);

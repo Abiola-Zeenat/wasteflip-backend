@@ -1,11 +1,15 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
+const { register, login, logout, getSession } = require("../controllers/auth");
+const {
+  validateSignup,
+  validateLogin,
+} = require("../middlewares/validateUser");
+const { authenticate } = require("../middlewares/authentication");
 
-
-const { register, login, logout} = require('../controllers/auth');
-
-router.post('/register', register);
-router.post('/login', login);
-router.get('/logout', logout);
+router.post("/register", validateSignup, register);
+router.post("/login", validateLogin, login);
+router.get("/logout", authenticate, logout); // is this suppose to be a get or post route
+router.get("/session", getSession);
 
 module.exports = router;
