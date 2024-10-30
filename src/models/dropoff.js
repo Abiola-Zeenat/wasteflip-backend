@@ -14,11 +14,19 @@ const dropOffSchema = new mongoose.Schema({
       required: true,
     },
     coordinates: {
-      type: [Number], // [longitude, latitude]
+      type: [Number],
       required: true,
+      validate: {
+        validator: function (coords) {
+          return coords.length === 2;
+        },
+        message:
+          "Coordinates should be an array of two numbers [longitude, latitude]",
+      },
     },
   },
 });
+dropOffSchema.index({ "location.coordinates": "2dsphere" }); // Enable geospatial queries
 
 const DropOff = mongoose.model("DropOff", dropOffSchema);
 
