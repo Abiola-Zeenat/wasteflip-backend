@@ -53,7 +53,7 @@ const refreshAccessToken = async (req, res) => {
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "none",
       maxAge: TOKENS_EXPIRY.ACCESS * 1000,
     });
 
@@ -72,4 +72,4 @@ module.exports = {
   generateAccessToken,
   generateRefreshToken,
   refreshAccessToken,
-}
+};

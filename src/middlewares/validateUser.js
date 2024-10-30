@@ -9,7 +9,7 @@ const handleErrorValidation = async (req, res, next) => {
 };
 // For signup
 const validateSignup = [
-  body("fullName").not().isEmpty().withMessage("Full Name is required"),
+  body("fullName").notEmpty().withMessage("Full Name is required"),
   body("email").isEmail().withMessage("Email is required"),
   body("password")
     .isLength({ min: 8 })
@@ -21,7 +21,7 @@ const validateSignup = [
 // For login
 const validateLogin = [
   body("email").isEmail().withMessage("Email is required"),
-  body("password").not().isEmpty().withMessage("Password is required"),
+  body("password").notEmpty().withMessage("Password is required"),
 
   handleErrorValidation,
 ];
