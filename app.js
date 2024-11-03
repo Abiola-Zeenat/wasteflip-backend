@@ -19,6 +19,7 @@ const feedbackRouter = require("./src/routes/feedback");
 const paymentRouter = require("./src/routes/payment");
 const scheduleRouter = require("./src/routes/schedule");
 const dropOffRouter = require("./src/routes/dropoff");
+const userRouter = require("./src/routes/user");
 
 //middlewares
 const errorHandlerMiddleware = require("./src/middlewares/error-handler");
@@ -36,6 +37,7 @@ app.use("/api/payment", paymentRouter);
 app.use("/api/schedule", scheduleRouter);
 app.use("/api/dropoff", dropOffRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

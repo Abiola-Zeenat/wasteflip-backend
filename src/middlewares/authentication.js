@@ -1,23 +1,30 @@
 const CustomError = require("../errors");
-const { generateRefreshToken } = require("../lib/constant/jwt");
+const User = require("../models/user");
 
 const authenticate = async (req, res, next) => {
-  const token = req.signedCookies.token;
+  const { accessToken } = req.cookies;
 
-  if (!token) {
-    throw new CustomError.UnauthenticatedError("Authentication Invalid");
+  if (!accessToken) {
+    return res.status(401).json({
+      success: false,
+      message: "Not authorized, no token",
+    });
   }
 
   try {
-    const { name, userId, role } = generateRefreshToken({ token });
-    req.user = { name, userId, role };
-    next();
+    const decoded = jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET);
+    const user = await User.findById(decoded.id).select("-password");
+
+    if (user) {
+      req.user = user;
+      next();
+    }
   } catch (error) {
-    throw new CustomError.UnauthenticatedError("Authentication Invalid");
+    res.status(401).json({ message: "Not authorized, token failed" });
   }
 };
 
-const authorize = async(req, res, next) => {
+const authorize = async (req, res, next) => {
   if (req.user && req.user.role === "admin") {
     next();
   } else {
