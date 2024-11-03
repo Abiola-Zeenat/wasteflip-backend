@@ -134,49 +134,6 @@ const deleteDropOff = async (req, res) => {
 };
 
 // Filter dropoff locations based on proximity to user's location
-// const getNearbyDropOffs = async (req, res) => {
-//   try {
-//     const { address, longitude, latitude, maxDistance } = req.query;
-
-//     let userCoordinates;
-//     if (address) {
-//       userCoordinates = await geocodeAddress(address);
-//     } else if (longitude && latitude) {
-//       userCoordinates = {
-//         longitude: parseFloat(longitude),
-//         latitude: parseFloat(latitude),
-//       };
-//     } else {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Either address or coordinates must be provided.",
-//       });
-//     }
-
-//     const nearbyDropOffs = await DropOff.find({
-//       location: {
-//         $near: {
-//           $geometry: {
-//             type: "Point",
-//             coordinates: [userCoordinates.longitude, userCoordinates.latitude],
-//           },
-//           $maxDistance: maxDistance * 1000, // convert km to meters
-//         },
-//       },
-//     }).populate("wasteType", "name");
-
-//     res.status(200).json({
-//       success: true,
-//       data: nearbyDropOffs,
-//       message: "Nearby dropoff locations retrieved successfully",
-//     });
-//   } catch (err) {
-//     res.status(500).json({
-//       success: false,
-//       message: err.message,
-//     });
-//   }
-// };
 const getNearbyDropOffs = async (req, res) => {
   try {
     const { address, longitude, latitude, maxDistance } = req.query;
