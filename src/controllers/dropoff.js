@@ -4,11 +4,14 @@ const DropOff = require("../models/dropoff");
 // Create a new dropoff location
 const createDropOff = async (req, res) => {
   try {
-    const { name, distance, img, wasteType, location } = req.body;
+    const { name, img, wasteType, location } = req.body;
+
+    const exist = await DropOff.findOne({ name });
+    if (exist)
+      return res.status(400).json({ message: "Dropoff already exists" });
 
     const newDropOff = new DropOff({
       name,
-      distance,
       img,
       wasteType,
       location: {
@@ -137,7 +140,7 @@ const getNearbyDropOffs = async (req, res) => {
 
     let userCoordinates;
     if (address) {
-      userCoordinates = await geocodeAddress(address);
+      userCoordinates = await geocodeAddress(address); // Assume this returns { longitude, latitude }
     } else if (longitude && latitude) {
       userCoordinates = {
         longitude: parseFloat(longitude),
@@ -150,22 +153,40 @@ const getNearbyDropOffs = async (req, res) => {
       });
     }
 
-    const nearbyDropOffs = await DropOff.find({
-      location: {
-        $near: {
-          $geometry: {
+    const nearbyDropOffs = await DropOff.aggregate([
+      {
+        $geoNear: {
+          near: {
             type: "Point",
             coordinates: [userCoordinates.longitude, userCoordinates.latitude],
           },
-          $maxDistance: maxDistance * 1000, // convert km to meters
+          distanceField: "distance", // calculated distance
+          maxDistance: maxDistance * 1609.34, // Convert meters to miles
+          spherical: true,
         },
       },
-    }).populate("wasteType", "name");
+      {
+        $lookup: {
+          from: "wastetypes",
+          localField: "wasteType",
+          foreignField: "_id",
+          as: "wasteType",
+        },
+      },
+    ]);
+
+    // to update each DropOff with the calculated distance
+    for (let dropOff of nearbyDropOffs) {
+      await DropOff.findByIdAndUpdate(dropOff._id, {
+        distance: dropOff.distance,
+      });
+    }
 
     res.status(200).json({
       success: true,
       data: nearbyDropOffs,
-      message: "Nearby dropoff locations retrieved successfully",
+      message:
+        "Nearby drop-off locations retrieved and distances calculated successfully",
     });
   } catch (err) {
     res.status(500).json({
