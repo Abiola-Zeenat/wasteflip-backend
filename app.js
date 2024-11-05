@@ -11,6 +11,12 @@ const cookieParser = require("cookie-parser");
 // database
 const connectDB = require("./src/config/db");
 
+// const crypto = require("crypto");
+
+// // Generate a random secret for JWT
+// const secret = crypto.randomBytes(64).toString("hex");
+// console.log(`Your JWT Secret: ${secret}`);
+
 // routers
 const authRouter = require("./src/routes/authRouter");
 const wasteRouter = require("./src/routes/wastetype");

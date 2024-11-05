@@ -7,6 +7,7 @@ const validateCreatePayment = [
   body("serviceCharge", "Service charge must be a number").isNumeric(),
   body("Total", "Total must be a number").isNumeric(),
   body("paymentMethod", "Payment method is required")
+    .trim()
     .notEmpty()
     .isIn(["Credit card", "transfer"])
     .withMessage("Payment method must be 'Credit card' or 'transfer'"),

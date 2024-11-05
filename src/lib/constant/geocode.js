@@ -4,7 +4,7 @@ async function getFetch() {
 }
 
 const geocodeAddress = async (address) => {
-  const apiKey = "AIzaSyDtPDh5irrjvRLB2u-gY-Q1EefT-64NlYs";
+  const apiKey = process.env.API_KEY;
   const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
     address
   )}&key=${apiKey}`;
