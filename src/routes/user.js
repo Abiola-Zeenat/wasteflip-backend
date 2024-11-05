@@ -10,7 +10,7 @@ const {
 const { authenticate, authorize } = require("../middlewares/authentication");
 
 router.get("/all", authenticate, authorize, getAllUsers);
-router.get("/:id", authenticate, authorize, getSpecificUser);
+router.get("/:id", authenticate, getSpecificUser);
 router.put("/:id", authenticate, updateUser);
 router.delete("/:id", authenticate, authorize, deleteUser);
 
