@@ -1,5 +1,6 @@
 const CustomError = require("../errors");
 const User = require("../models/user");
+const jwt = require("jsonwebtoken");
 
 const authenticate = async (req, res, next) => {
   const { accessToken } = req.cookies;
@@ -20,7 +21,9 @@ const authenticate = async (req, res, next) => {
       next();
     }
   } catch (error) {
-    res.status(401).json({ message: "Not authorized, token failed" });
+    res
+      .status(401)
+      .json({ message: `Not authorized, token failed: ${error.message}` });
   }
 };
 

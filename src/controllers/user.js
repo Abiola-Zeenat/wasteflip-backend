@@ -21,7 +21,7 @@ const getSpecificUser = async (req, res) => {
     const { id } = req.params;
     const user = await User.findById(id).select("-password");
     if (user) {
-      res.status(200).json({
+      return res.status(200).json({
         success: true,
         data: user,
         message: "User retrieved successfully",
@@ -39,8 +39,16 @@ const getSpecificUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const { id } = req.params
-    const updatedUser = await User.findByIdAndUpdate(id, req.body, { new: true });
+    const { id } = req.params;
+    const updatedUser = await User.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+
+    if (!updatedUser) {
+      return res
+        .status(404)
+        .json({ message: `The user with id of ${id} was not found` });
+    }
 
     res.status(200).json({
       success: true,
@@ -50,8 +58,8 @@ const updateUser = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: "Error updating user"
-     });
+      message: "Error updating user",
+    });
   }
 };
 
@@ -61,17 +69,16 @@ const deleteUser = async (req, res) => {
     const user = await User.findByIdAndDelete(id);
 
     if (!user) {
-      res.status(404).json({ 
+      return res.status(404).json({
         success: false,
-        message: "User not found" 
+        message: "User not found",
       });
-    } 
-      res.status(200).json({ 
-        success:true,
-        data: user,
-        message: "User deleted successfully" 
-      });
-     
+    }
+    res.status(200).json({
+      success: true,
+      data: user,
+      message: "User deleted successfully",
+    });
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -79,6 +86,5 @@ const deleteUser = async (req, res) => {
     });
   }
 };
-
 
 module.exports = { getAllUsers, getSpecificUser, deleteUser, updateUser };
