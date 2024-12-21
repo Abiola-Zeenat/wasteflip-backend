@@ -43,7 +43,7 @@ const register = async (req, res) => {
     res.status(StatusCodes.CREATED).json({
       status: 201,
       message: "User created successfully",
-      user: userToken,
+      user: accessToken,
     });
 };
 
@@ -83,7 +83,7 @@ const login = async (req, res) => {
       res.status(StatusCodes.OK).json({
         status: 200,
         message: "User logged in successfully",
-        user: userToken,
+        user: accessToken,
       });
   } catch (error) {
     console.error(error);
